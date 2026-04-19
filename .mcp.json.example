@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "gmail-mcp": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "/ABSOLUTE/PATH/TO/gmail-mcp/server",
+        "python",
+        "server.py"
+      ],
+      "env": {
+        "GOOGLE_CLIENT_ID": "YOUR_GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET": "YOUR_GOOGLE_CLIENT_SECRET"
+      }
+    }
+  }
+}

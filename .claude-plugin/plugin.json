@@ -1,0 +1,9 @@
+{
+  "name": "gmail-mcp",
+  "version": "0.1.0",
+  "description": "Multi-account Gmail control for Claude. Search, read, draft, send, archive, and label email across any number of Gmail accounts with OS-keychain token storage, draft-then-confirm sending, attachments, thread context, and an audit log.",
+  "author": {
+    "name": "Amari"
+  },
+  "keywords": ["gmail", "email", "mcp", "oauth", "google"]
+}
