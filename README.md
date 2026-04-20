@@ -26,6 +26,14 @@ Files Claude can attach to emails must be placed in `~/Downloads/gmail-mcp-uploa
 
 ### Step 1 — Create your own Google Cloud credentials (one-time)
 
+> **Quick install:** Once you have your credentials (Step 1), just run:
+> ```bash
+> git clone https://github.com/3vening/gmail-mcp.git
+> cd gmail-mcp
+> bash install.sh
+> ```
+> The installer sets up Claude Desktop and Claude Code automatically. Skip to Step 4 when done.
+
 > You need your own credentials so Google knows it's your app accessing your email. This is free and takes about 5 minutes.
 
 1. Go to [console.cloud.google.com](https://console.cloud.google.com/) and create a new project (or use an existing one)
