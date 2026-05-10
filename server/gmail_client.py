@@ -9,6 +9,7 @@ from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.utils import formataddr, getaddresses
 from pathlib import Path
 
 import html2text
@@ -19,6 +20,23 @@ from googleapiclient.errors import HttpError
 MIN_PLAIN_TEXT_LENGTH = 40  # below this, prefer HTML-converted text
 MAX_BODY_CHARS = 20_000  # truncate bodies past this unless full=True
 RETRY_STATUSES = {429, 500, 502, 503, 504}
+
+
+def _encode_addr_list(value: str) -> str:
+    """RFC 2047 encode display names so Gmail accepts non-ASCII (e.g. Cyrillic).
+
+    The default email policy (compat32) does not encode non-ASCII display names,
+    which causes Gmail's API to reject the raw message with "Invalid To header".
+    Bare addresses pass through unchanged.
+    """
+    if not value:
+        return value
+    parts = []
+    for name, addr in getaddresses([value]):
+        if not addr and not name:
+            continue
+        parts.append(formataddr((name, addr), charset="utf-8") if name else addr)
+    return ", ".join(parts) if parts else value
 
 
 def get_service(creds: Credentials):
@@ -217,13 +235,13 @@ def _build_mime_message(to: str, subject: str, body: str, from_email: str,
                        in_reply_to: str = "", references: str = "",
                        attachments: list[Path] | None = None) -> MIMEMultipart:
     msg = MIMEMultipart()
-    msg["From"] = from_email
-    msg["To"] = to
+    msg["From"] = _encode_addr_list(from_email)
+    msg["To"] = _encode_addr_list(to)
     msg["Subject"] = subject
     if cc:
-        msg["Cc"] = cc
+        msg["Cc"] = _encode_addr_list(cc)
     if bcc:
-        msg["Bcc"] = bcc
+        msg["Bcc"] = _encode_addr_list(bcc)
     if in_reply_to:
         msg["In-Reply-To"] = in_reply_to
     if references:
